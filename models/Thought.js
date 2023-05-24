@@ -1,4 +1,5 @@
 const { Schema, model } = require('mongoose');
+const reactionSchema = require("./Reaction")
 
 // Schema to create Thougt Model
 const thoughtSchema = new Schema(
@@ -13,15 +14,15 @@ const thoughtSchema = new Schema(
             type: Date,
             default: Date.now,
             //Use a getter method to format the timestamp on query
+            get: timestamp => timestamp.toUTCString()
+            
         },
         username: {
             type: String,
             required: true,
         },
         reactions: [
-            {
-            //Array of nested documents created with the reactionSchema
-            },
+            reactionSchema
         ],
     },
     {
@@ -32,15 +33,16 @@ const thoughtSchema = new Schema(
       },
 );
 
-// Create a virtual property "reaction count" that retreives the length of the reactions array
+// Create a virtual property "freindCount" that retrives the length of the user's freinds
+
 thoughtSchema
-.virtual('reactions')
-//Getter
-.get(function() {
-    return this.reactions.length;
+.virtual('reactionCount')
+// Getter
+.get(function () {
+    return this.rections.length;
 });
 
-// Initialize our Application model
+// Initialize our User model
 const Thought = model('thought', thoughtSchema);
 
 module.exports = Thought;

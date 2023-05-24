@@ -1,4 +1,10 @@
 const { Schema, model } = require('mongoose');
+const friendSchema = require('./Friend')
+var validateEmail = function(email) {
+    var validate = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    return validate.test(email)
+  };
+
 
 // Schema to create User model
 const userSchema = new Schema(
@@ -18,13 +24,13 @@ const userSchema = new Schema(
         thoughts: [
             {
                 type: Schema.Types.ObjectId,
-                ref: 'thoughts'
+                ref: 'Thought'
             },
         ],
         friends: [
             {
                 type: Schema.Types.ObjectId,
-                ref: 'user',
+                ref: 'User'
             },
         ],
 
@@ -47,6 +53,6 @@ userSchema
 });
 
 // Initialize our User model
-const User = model('user', userSchema);
+const User = model('User', userSchema);
 
 module.exports = User;
