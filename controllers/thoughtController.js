@@ -4,6 +4,7 @@ module.exports = {
   // Function to get all of the thoughts by invoking the find() method with no arguments.
   // Then we return the results as JSON, and catch any errors. Errors are sent as JSON with a message and a 500 status code
   getThought(req, res) {
+    console.log("====================================================================")
     Thought.find({})
       .then((thought) => res.json(thought))
       .catch((err) => res.status(500).json(err));
@@ -21,23 +22,31 @@ module.exports = {
   // Creates a new thougt. Accepts a request body with the entire thought object.
   // Because thoughts are associated with Users, we then update the User who created the app and add the ID of the thought to the thoughts array
   createThought(req, res) {
+    console.log("inside the createThough")
     Thought.create(req.body)
       .then((thought) => {
+        console.log("though: ", thought);
         return User.findOneAndUpdate(
           { _id: req.body.userId },
-          { $addToSet: { thoughts: thought._id } },
+          { $push: { thoughts: thought._id } },
           { new: true }
         );
       })
-      .then((user) =>
-        !user
-          ? res.status(404).json({
-              message: 'thought created, but found no user with that ID',
-            })
-          : res.json('Created the thought :tada:')
+      .then((user) => {
+      console.log("inside .then user: ", user);
+      if(!user) {
+        return res.status(404).json({message: 'though created but no user found with the id '})
+      }
+      res.json({message: 'Thought created successfully'})
+        // !user
+        //   ? res.status(404).json({
+        //       message: 'thought created, but found no user with that ID',
+        //     })
+        //   : res.json('Created the thought :tada:')
+      }
       )
       .catch((err) => {
-        console.log(err);
+        console.log("err in catch while creating a user:", err);
         res.status(500).json(err);
       });
   },
