@@ -4,7 +4,6 @@ module.exports = {
   // Function to get all of the thoughts by invoking the find() method with no arguments.
   // Then we return the results as JSON, and catch any errors. Errors are sent as JSON with a message and a 500 status code
   getThought(req, res) {
-    console.log("====================================================================")
     Thought.find({})
       .then((thought) => res.json(thought))
       .catch((err) => res.status(500).json(err));
@@ -91,6 +90,7 @@ module.exports = {
   },
   // Adds a reaction to an thought. This method is unique in that we add the entire body of the reaction rather than the ID with the mongodb $addToSet operator.
   addReaction(req, res) {
+    console.log('================================')
     Thought.findOneAndUpdate(
       { _id: req.params.thoughtId },
       { $addToSet: { reactions: req.body } },
