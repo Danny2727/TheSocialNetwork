@@ -18,7 +18,7 @@ module.exports = {
       )
       .catch((err) => res.status(500).json(err));
   },
-  // Creates a new thougt. Accepts a request body with the entire thought object.
+  // Creates a new thought. Accepts a request body with the entire thought object.
   // Because thoughts are associated with Users, we then update the User who created the app and add the ID of the thought to the thoughts array
   createThought(req, res) {
     console.log("inside the createThough")
@@ -37,11 +37,7 @@ module.exports = {
         return res.status(404).json({message: 'though created but no user found with the id '})
       }
       res.json({message: 'Thought created successfully'})
-        // !user
-        //   ? res.status(404).json({
-        //       message: 'thought created, but found no user with that ID',
-        //     })
-        //   : res.json('Created the thought :tada:')
+        
       }
       )
       .catch((err) => {
